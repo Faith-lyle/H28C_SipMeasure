@@ -6,7 +6,7 @@
 #include "stdio.h"
 
 void CmdCheck(char *cmd){
-    if(strcmp(cmd,"help")==0){Help();return;}
+    if(strcmp(cmd,"HELP")==0){Help();return;}
     else if(strcmp(cmd,"START_TEST")==0){Start();return;}
     else if(strcmp(cmd,"GET_RESULT")==0){GET_RESULT();return;}
     else if(strcmp(cmd,"RF_START_TEST")==0){RF_TEST();return;}

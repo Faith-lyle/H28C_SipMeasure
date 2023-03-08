@@ -137,8 +137,6 @@ void Fixture_Information(void)
     uint32_t CPU_IdCode;
     uint16_t Flash_Size;
     float	SoftVersion = SOFT_VERSION;
-
-    printf("COPYRIGHT(C):SF-Tek\r\n");
     printf("======================================\r\n");
     printf("MOD:%s\r\nDate:%s\r\n",STATION_INFO,VERINFO);
     printf("UART Baud rate:%d,(8,1,N)\r\n",BAUD_RATE1);

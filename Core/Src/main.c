@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "command.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,7 +99,12 @@ int main(void)
   MX_TIM7_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+    HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,1);
+    HAL_GPIO_WritePin(GPIOC,GPIO_PIN_0,0);
+    HAL_GPIO_WritePin(GPIOC,GPIO_PIN_1,1);
   HAL_UART_Receive_IT(&huart1,(uint8_t *)&rx,1);
+  HAL_TIM_Base_Start_IT(&htim7);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -108,6 +114,7 @@ int main(void)
     /* USER CODE END WHILE */
     /* USER CODE BEGIN 3 */
       if (uart_finished_flag==1){
+//          printf("%s\n",string);
           CmdCheck((char *)string);
           uart_finished_flag =0;
           uart_index = 0;
@@ -134,7 +141,7 @@ void SystemClock_Config(void)
   * in the RCC_OscInitTypeDef structure.
   */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 4;
@@ -162,6 +169,20 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim==&htim7)
+    {
+        static uint16_t  i = 0;
+        i++;
+        if (i ==500)
+        {
+            HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_6);
+            i=0;
+        }
+    }
+}
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart->Instance==USART1)
